@@ -1,0 +1,10 @@
+numpy
+Pillow
+scipy
+six
+ImageHash
+img2pdf
+imutils
+pytube
+validators
+requests

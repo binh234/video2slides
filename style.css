@@ -1,0 +1,25 @@
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#row-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a,
+a:hover,
+a:visited {
+  text-decoration-line: underline;
+  font-weight: 600;
+  color: #1f2937 !important;
+}
+
+.dark a,
+.dark a:hover,
+.dark a:visited {
+  color: #f3f4f6 !important;
+}
