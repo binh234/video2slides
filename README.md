@@ -8,7 +8,7 @@ This is highly useful when one wishes to have a video lecture(with or without an
 
 - It will take some time to complete (about half of the original video length), so stay tuned!
 - If the YouTube video link doesn't work, you can try again later or download the video and process it locally
-- For slide videos with full background animation similar to [this video](https://www.youtube.com/watch?v=YxlDoz_P4kc), the algorithm cannot extract the right frames ateaftthe animation ends. In that case, using Frame Differencing (`--type Frame_Diff`) will yield better results, but the results are still decent.
+- For slide videos with full background animation similar to [this video](https://www.youtube.com/watch?v=YxlDoz_P4kc), the algorithm cannot extract the right frames after tthe animation ends. In that case, using Frame Differencing (`--type Frame_Diff`) will yield better results, but the results are still decent.
 - You may want to trim the video before processing it for better results.
 
 ## Dependencies
