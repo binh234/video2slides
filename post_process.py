@@ -2,6 +2,7 @@ import imagehash
 import os
 from collections import deque
 from PIL import Image
+from tqdm import tqdm
 
 
 def find_similar_images(
@@ -16,31 +17,30 @@ def find_similar_images(
 
     print("---" * 5, "Finding similar files", "---" * 5)
 
-    for file in snapshots_files:
-        read_file = Image.open(os.path.join(base_dir, file))
-        comp_hash = hashfunc(read_file, hash_size=hash_size)
-        duplicate = False
+    with tqdm(snapshots_files) as t:
+        for file in t:
+            read_file = Image.open(os.path.join(base_dir, file))
+            comp_hash = hashfunc(read_file, hash_size=hash_size)
+            duplicate = False
 
-        if comp_hash not in hash_dict:
-            hash_dict[comp_hash] = file
-            # Compare with hash queue to find out potential duplicates
-            for img_hash in hash_queue:
-                if img_hash - comp_hash <= threshold:
-                    duplicate = True
-                    break
+            if comp_hash not in hash_dict:
+                hash_dict[comp_hash] = file
+                # Compare with hash queue to find out potential duplicates
+                for img_hash in hash_queue:
+                    if img_hash - comp_hash <= threshold:
+                        duplicate = True
+                        break
 
-            if not duplicate:
-                hash_queue.append(comp_hash)
-        else:
-            duplicate = True
+                if not duplicate:
+                    hash_queue.append(comp_hash)
+            else:
+                duplicate = True
 
-        if duplicate:
-            print("Duplicate file: ", file)
-            duplicates.append(file)
-            num_duplicates += 1
+            if duplicate:
+                duplicates.append(file)
+                num_duplicates += 1
+                t.set_postfix_str(f"Duplicate files: {num_duplicates}")
 
-    print("\nTotal duplicate files:", num_duplicates)
-    print("-----" * 10)
     return hash_dict, duplicates
 
 

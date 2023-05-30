@@ -15,8 +15,8 @@ def download_video_from_url(url, output_dir=DOWNLOAD_DIR):
 
         content_type = response.headers.get("content-type")
         if "video" not in content_type:
-            print("The given URL is not a valid video")
-            return None
+            print("The given URL is not a valid video URL")
+            return
         file_extension = mimetypes.guess_extension(content_type)
 
         os.makedirs(output_dir, exist_ok=True)
@@ -32,7 +32,7 @@ def download_video_from_url(url, output_dir=DOWNLOAD_DIR):
 
     except requests.exceptions.RequestException as e:
         print("An error occurred while downloading the video:", str(e))
-        return None
+        return
 
 
 def download_video_from_youtube(url, output_dir=DOWNLOAD_DIR):
@@ -52,7 +52,7 @@ def download_video_from_youtube(url, output_dir=DOWNLOAD_DIR):
 
     except Exception as e:
         print("An error occurred while downloading the video:", str(e))
-        return None
+        return
 
 
 def download_video(url, output_dir=DOWNLOAD_DIR):

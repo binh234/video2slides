@@ -8,3 +8,4 @@ imutils
 pytube
 validators
 requests
+tqdm

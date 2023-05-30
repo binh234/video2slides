@@ -114,8 +114,8 @@ with gr.Blocks(css="style.css") as demo:
         You can browse your video from the local file system, or enter a video URL/YouTube video link to start processing.
 
         **Note**: 
-        - It will take a bit of time to complete (~40% of the original video length), so stay tuned!
-        - If the YouTube downloader return errors, you can try again later or download video to your computer and then upload it to the app
+        - It will take some time to complete (~ half of the original video length), so stay tuned!
+        - If the YouTube video link doesn't work, you can try again later or download video to your computer and then upload it to the app
         - Remember to press Enter if you are using an external URL
         """,
             elem_id="container",
@@ -176,7 +176,7 @@ with gr.Blocks(css="style.css") as demo:
                     file_url = gr.Textbox(
                         value="",
                         label="Upload your file",
-                        placeholder="Enter a video url or YouTube link",
+                        placeholder="Enter a video url or YouTube video link",
                         show_label=False,
                     )
                 with gr.Column(scale=1, min_width=160):

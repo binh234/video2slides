@@ -1,7 +1,7 @@
-import os
-import time
-import sys
 import cv2
+import os
+import sys
+from tqdm import tqdm
 from utils import resize_image_frame
 
 
@@ -38,7 +38,9 @@ def capture_slides_bg_modeling(
         print("Unable to open video file: ", video_path)
         sys.exit()
 
-    start = time.time()
+    num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    prog_bar = tqdm(total=num_frames)
+
     # Loop over subsequent frames.
     while cap.isOpened():
         ret, frame = cap.read()
@@ -66,21 +68,16 @@ def capture_slides_bg_modeling(
 
             png_filename = f"{screenshots_count:03}.jpg"
             out_file_path = os.path.join(output_dir_path, png_filename)
-            print(f"Saving file at: {out_file_path}")
             cv2.imwrite(out_file_path, orig_frame, [cv2.IMWRITE_JPEG_QUALITY, 75])
+            prog_bar.set_postfix_str(f"Total Screenshots: {screenshots_count}")
 
         # p_non_zero >= MIN_PERCENT_THRESH, indicates motion/animations.
         # Hence wait till the motion across subsequent frames has settled down.
         elif capture_frame and p_non_zero >= MIN_PERCENT_THRESH:
             capture_frame = False
+        
+        prog_bar.update(1)
 
-    end_time = time.time()
-    print("***" * 10, "\n")
-    print("Statistics:")
-    print("---" * 10)
-    print(f"Total Time taken: {round(end_time-start, 3)} secs")
-    print(f"Total Screenshots captured: {screenshots_count}")
-    print("---" * 10, "\n")
-
-    # Release Video Capture object.
+    # Release progress bar and video capture object.
+    prog_bar.close()
     cap.release()

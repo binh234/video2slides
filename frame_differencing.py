@@ -1,7 +1,7 @@
 import cv2
 import os
-import time
 import sys
+from tqdm import tqdm
 
 
 def capture_slides_frame_diff(
@@ -24,11 +24,11 @@ def capture_slides_frame_diff(
         sys.exit()
 
     success, first_frame = cap.read()
+    num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    prog_bar = tqdm(total=num_frames)
 
     print("Using frame differencing for Background Subtraction...")
     print("---" * 10)
-
-    start = time.time()
 
     # The 1st frame should always be present in the output directory.
     # Hence capture and save the 1st frame.
@@ -42,10 +42,10 @@ def capture_slides_frame_diff(
 
         filename = f"{screenshots_count:03}.jpg"
         out_file_path = os.path.join(output_dir_path, filename)
-        print(f"Saving file at: {out_file_path}")
 
         # Save frame.
         cv2.imwrite(out_file_path, first_frame, [cv2.IMWRITE_JPEG_QUALITY, 75])
+        prog_bar.update(1)
 
     # Loop over subsequent frames.
     while cap.isOpened():
@@ -79,18 +79,13 @@ def capture_slides_frame_diff(
 
                 filename = f"{screenshots_count:03}.jpg"
                 out_file_path = os.path.join(output_dir_path, filename)
-                print(f"Saving file at: {out_file_path}")
 
                 cv2.imwrite(out_file_path, frame, [cv2.IMWRITE_JPEG_QUALITY, 75])
+                prog_bar.set_postfix_str(f"Total Screenshots: {screenshots_count}")
 
         prev_frame = curr_frame
+        prog_bar.update(1)
 
-    end_time = time.time()
-    print("***" * 10, "\n")
-    print("Statistics:")
-    print("---" * 5)
-    print(f"Total Time taken: {round(end_time-start, 3)} secs")
-    print(f"Total Screenshots captured: {screenshots_count}")
-    print("---" * 10, "\n")
-
+    # Release progress bar and video capture object.
+    prog_bar.close()
     cap.release()
